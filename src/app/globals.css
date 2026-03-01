@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/* Brand + neo-brutalism design tokens */
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  /* Primary */
+  --oxblood: #953334;
+  --oxblood-deep: #722728;
+  --oxblood-dark: #5c1f20;
+  /* Neutrals */
+  --white: #ffffff;
+  --snow: #fafafa;
+  --mist: #e8e8e8;
+  --silver: #9a9a9a;
+  --pewter: #6b6b6b;
+  --slate: #4a4a4a;
+  --charcoal: #1a1a1a;
+  /* Expedition */
+  --deep-sea: #0a1628;
+  --abyss: #061018;
+  --lagoon: #2b9e8f;
+  --reef: #1e7a6d;
+  --gold-muted: #b8a878;
+  /* Neo-brutalism */
+  --shadow-offset: 4px;
+  --border-thick: 3px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-oxblood: var(--oxblood);
+  --color-oxblood-deep: var(--oxblood-deep);
+  --color-oxblood-dark: var(--oxblood-dark);
+  --color-snow: var(--snow);
+  --color-mist: var(--mist);
+  --color-silver: var(--silver);
+  --color-pewter: var(--pewter);
+  --color-slate: var(--slate);
+  --color-charcoal: var(--charcoal);
+  --color-deep-sea: var(--deep-sea);
+  --color-abyss: var(--abyss);
+  --color-lagoon: var(--lagoon);
+  --color-reef: var(--reef);
+  --color-gold-muted: var(--gold-muted);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --shadow-brutal: var(--shadow-offset) var(--shadow-offset) 0 0 var(--charcoal);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
