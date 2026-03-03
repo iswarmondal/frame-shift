@@ -43,9 +43,12 @@ export async function deleteVideoAction(id: string): Promise<ActionResult> {
   }
 
   try {
-    await deleteBlobByUrl(video.blob_url);
-    await deleteVideo(id);
+    await Promise.all([
+      deleteBlobByUrl(video.blob_url),
+      deleteVideo(id)
+    ]);
     revalidatePath("/dashboard");
+    revalidatePath(`/dashboard/video/${id}`);
     return { ok: true };
   } catch (e) {
     console.error(e);
