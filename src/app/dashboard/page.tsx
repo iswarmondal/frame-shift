@@ -17,6 +17,7 @@ export default async function DashboardPage() {
   }
 
   const videos = await listVideosByOwner();
+  const dateFormatter = new Intl.DateTimeFormat();
 
   return (
     <div className="min-h-screen p-8">
@@ -47,7 +48,7 @@ export default async function DashboardPage() {
                     <CardHeader>
                       <CardTitle className="line-clamp-1">{v.title}</CardTitle>
                       <p className="text-sm text-pewter">
-                        {new Date(v.created_at).toLocaleDateString()} · {v.view_count} view{v.view_count !== 1 ? "s" : ""}
+                        {dateFormatter.format(new Date(v.created_at))} · {v.view_count} view{v.view_count !== 1 ? "s" : ""}
                       </p>
                     </CardHeader>
                     <CardContent>
