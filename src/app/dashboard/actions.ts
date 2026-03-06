@@ -26,7 +26,7 @@ export async function uploadVideoAction(formData: FormData): Promise<UploadResul
     return { ok: false, error: "Invalid file type. Use MP4, WebM, or QuickTime." };
   }
   if (!isWithinSizeLimit(file.size)) {
-    return { ok: false, error: "File too large. Max 4 MB for server upload." };
+    return { ok: false, error: "File too large. Max 20 MB for server upload." };
   }
 
   const ext = file.name.split(".").pop() || "mp4";
