@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import {
   getVideoByShareHash,
   incrementVideoViewCount,
@@ -17,7 +18,13 @@ export default async function PublicVideoPage({
     notFound();
   }
 
-  await incrementVideoViewCount(hash);
+  after(async () => {
+    try {
+      await incrementVideoViewCount(hash);
+    } catch (error) {
+      console.error("Failed to increment video view count:", error);
+    }
+  });
 
   return (
     <div className="min-h-screen bg-deep-sea p-4 md:p-8">
