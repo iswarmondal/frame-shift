@@ -9,18 +9,18 @@ export interface ButtonProps
 
 const variantStyles = {
   primary:
-    "border-2 border-charcoal bg-oxblood text-white shadow-[4px_4px_0_0_theme(colors.charcoal)] hover:bg-oxblood-deep hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_theme(colors.charcoal)]",
+    "border-[4px] border-black bg-yellow text-black shadow-brutal hover:translate-x-1 hover:translate-y-1 hover:shadow-none hover:bg-[#e6c757] active:bg-[#d9b94e]",
   secondary:
-    "border-2 border-charcoal bg-snow text-charcoal shadow-[4px_4px_0_0_theme(colors.charcoal)] hover:bg-mist hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_theme(colors.charcoal)]",
+    "border-[4px] border-black bg-cyan text-black shadow-brutal hover:translate-x-1 hover:translate-y-1 hover:shadow-none hover:bg-[#43b9e0] active:bg-[#39add1]",
   outline:
-    "border-2 border-charcoal bg-transparent text-charcoal hover:bg-charcoal/5",
-  ghost: "border-2 border-transparent bg-transparent text-charcoal hover:bg-charcoal/5",
+    "border-[4px] border-black bg-white text-black shadow-brutal hover:translate-x-1 hover:translate-y-1 hover:shadow-none hover:bg-gray active:bg-[#d0d0d0]",
+  ghost: "border-4 border-transparent bg-transparent text-black hover:bg-gray/50",
 };
 
 const sizeStyles = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-12 px-5 text-base",
-  lg: "h-14 px-8 text-lg",
+  sm: "h-10 px-4 text-sm",
+  md: "h-14 px-6 text-base",
+  lg: "h-16 px-10 text-lg",
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -28,7 +28,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`inline-flex items-center justify-center font-semibold uppercase tracking-wider transition-[box-shadow,transform,background-color] disabled:pointer-events-none disabled:opacity-50 rounded-none ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={`inline-flex items-center justify-center font-black uppercase tracking-widest transition-all disabled:pointer-events-none disabled:opacity-50 rounded-none ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
         {...props}
       />
     );

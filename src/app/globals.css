@@ -2,55 +2,47 @@
 
 /* Brand + neo-brutalism design tokens */
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
+  --background: #fff8e7;
+  /* off-white or light warm yellow */
+  --foreground: #000000;
   /* Primary */
-  --oxblood: #953334;
-  --oxblood-deep: #722728;
-  --oxblood-dark: #5c1f20;
+  --neo-yellow: #f4d35e;
+  --neo-cyan: #4cc9f0;
+  --neo-pink: #f72585;
+  --neo-green: #06d6a0;
+  --neo-red: #ef476f;
   /* Neutrals */
   --white: #ffffff;
-  --snow: #fafafa;
-  --mist: #e8e8e8;
-  --silver: #9a9a9a;
-  --pewter: #6b6b6b;
-  --slate: #4a4a4a;
-  --charcoal: #1a1a1a;
-  /* Expedition */
-  --deep-sea: #0a1628;
-  --abyss: #061018;
-  --lagoon: #2b9e8f;
-  --reef: #1e7a6d;
-  --gold-muted: #b8a878;
-  /* Neo-brutalism */
-  --shadow-offset: 4px;
-  --border-thick: 3px;
+  --black: #000000;
+  --gray: #e5e5e5;
+  /* Neo-brutalism tokens */
+  --shadow-offset: 6px;
+  --border-thick: 4px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-oxblood: var(--oxblood);
-  --color-oxblood-deep: var(--oxblood-deep);
-  --color-oxblood-dark: var(--oxblood-dark);
-  --color-snow: var(--snow);
-  --color-mist: var(--mist);
-  --color-silver: var(--silver);
-  --color-pewter: var(--pewter);
-  --color-slate: var(--slate);
-  --color-charcoal: var(--charcoal);
-  --color-deep-sea: var(--deep-sea);
-  --color-abyss: var(--abyss);
-  --color-lagoon: var(--lagoon);
-  --color-reef: var(--reef);
-  --color-gold-muted: var(--gold-muted);
+  --color-yellow: var(--neo-yellow);
+  --color-cyan: var(--neo-cyan);
+  --color-pink: var(--neo-pink);
+  --color-green: var(--neo-green);
+  --color-red: var(--neo-red);
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-gray: var(--gray);
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
-  --shadow-brutal: var(--shadow-offset) var(--shadow-offset) 0 0 var(--charcoal);
+  --shadow-brutal: var(--shadow-offset) var(--shadow-offset) 0 0 var(--black);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    linear-gradient(0deg, var(--black) 2px, transparent 2px),
+    linear-gradient(90deg, var(--black) 2px, transparent 2px);
+  background-size: 64px 64px;
+  background-position: 0 0, 0 0;
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
 }

@@ -21,26 +21,26 @@ export function UploadForm() {
   }, [state, router]);
 
   return (
-    <form action={formAction} className="space-y-4">
-      <div className="flex flex-wrap items-end gap-4">
-        <label className="flex flex-col gap-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate">
-            Video file (MP4, WebM, max 4 MB)
+    <form action={formAction} className="space-y-4 inline-block w-full max-w-2xl">
+      <div className="flex flex-col sm:flex-row flex-wrap items-end gap-6">
+        <label className="flex flex-col gap-2 w-full sm:w-auto flex-1">
+          <span className="text-sm font-black uppercase tracking-widest text-black bg-white inline-block px-2 py-1 border-[4px] border-black max-w-max">
+            Video file (MP4, WebM, max 20 MB)
           </span>
           <input
             type="file"
             name="video"
             accept="video/mp4,video/webm,video/quicktime"
             required
-            className="block w-full max-w-sm border-2 border-charcoal px-3 py-2 file:mr-2 file:border-2 file:border-charcoal file:bg-snow file:px-3 file:py-1 file:text-sm file:font-semibold"
+            className="block w-full border-[4px] border-black bg-white px-3 py-3 file:mr-4 file:border-[4px] file:border-black file:bg-yellow file:px-4 file:py-2 file:text-sm file:font-black file:uppercase file:cursor-pointer hover:file:bg-[#e6c757] file:transition-colors focus:outline-none focus:ring-4 focus:ring-pink"
           />
         </label>
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending} className="w-full sm:w-auto h-[76px] self-end">
           {isPending ? "Uploading…" : "Upload"}
         </Button>
       </div>
       {state && !state.ok && (
-        <p className="text-sm text-oxblood">{state.error}</p>
+        <p className="text-md font-black uppercase bg-red text-white p-2 border-[4px] border-black inline-block">{state.error}</p>
       )}
     </form>
   );
