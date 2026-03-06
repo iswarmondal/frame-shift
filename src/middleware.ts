@@ -23,16 +23,14 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
   const isProtected = pathname === PROTECTED_PREFIX || pathname.startsWith(`${PROTECTED_PREFIX}/`);
-  const isPublicVideo = pathname.startsWith("/video/");
 
   if (isProtected) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
     if (!user) {
       const redirect = new URL("/", request.url);
       redirect.searchParams.set("redirectTo", pathname);
