@@ -14,7 +14,9 @@ export function RecordView({ hash }: { hash: string }) {
     sent.current = true;
     fetch(`/api/video/${encodeURIComponent(hash)}/view`, {
       method: "POST",
-      credentials: "same-origin",
+    fetch(`/api/video/${encodeURIComponent(hash)}/view`, {
+      method: "POST",
+    }).catch(() => {
     }).catch(() => {
       // Best-effort; don't disturb the user
     });
