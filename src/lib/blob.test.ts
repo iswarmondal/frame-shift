@@ -10,7 +10,7 @@ test('isWithinSizeLimit boundary conditions', () => {
   assert.strictEqual(isWithinSizeLimit(MAX_SIZE_BYTES + 1), false, 'Above MAX_SIZE_BYTES should be invalid (above upper boundary)');
 });
 
-test('isAllowedVideoType', () => {
+  assert.ok(VIDEO_TYPES.length > 0, 'VIDEO_TYPES should not be empty');
   VIDEO_TYPES.forEach(type => {
     assert.strictEqual(isAllowedVideoType(type), true, `${type} should be allowed`);
   });
