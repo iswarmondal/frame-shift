@@ -1,7 +1,4 @@
-import {
-  createAnonClient,
-  createClient,
-} from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 export type VideoRow = {
   id: string;
@@ -77,7 +74,7 @@ export async function getVideoByShareHash(
  * No-op if hash not found or revoked.
  */
 export async function incrementVideoViewCount(hash: string): Promise<void> {
-  const supabase = createAnonClient();
+  const supabase = await createClient();
   const { error } = await supabase.rpc("increment_video_view_count", {
     p_hash: hash,
   });
