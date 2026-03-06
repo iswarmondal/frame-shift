@@ -1,6 +1,6 @@
 import { put, del as blobDel } from "@vercel/blob";
 
-export const VIDEO_TYPES = ["video/mp4", "video/webm", "video/quicktime"];
+export const VIDEO_TYPES = ["video/mp4", "video/webm", "video/quicktime"] as const;
 export const MAX_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB (server action body limit is ~4.5 MB)
 
 export function isAllowedVideoType(type: string): boolean {
