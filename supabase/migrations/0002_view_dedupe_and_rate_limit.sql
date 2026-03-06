@@ -26,7 +26,6 @@ set search_path = public
 as $$
 declare
   v_rate_limited boolean;
-  v_replay boolean;
 begin
   -- Rate limit: same ip + hash already viewed in last 10 minutes
   select exists (
