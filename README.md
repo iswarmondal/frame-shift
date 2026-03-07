@@ -21,7 +21,8 @@ Loom-style video sharing: upload videos, get shareable links, revoke access, and
 
    Copy `.env.example` to `.env.local` and fill in:
 
-   - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` from [Supabase API settings](https://supabase.com/dashboard/project/_/settings/api)
+   - `NEXT_PUBLIC_SITE_URL` optional canonical site URL / fallback for non-request contexts
+   - `VIEW_TOKEN_SECRET` required HMAC secret for signing view tokens (random string, ≥ 16 chars)
    - `NEXT_PUBLIC_SITE_URL` optional canonical site URL / fallback for non-request contexts
    - `BLOB_READ_WRITE_TOKEN` from [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) (create a store and add the token to env)
 
