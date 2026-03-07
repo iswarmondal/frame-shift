@@ -1,9 +1,7 @@
+import { getVideoByShareHash } from "@/lib/db/videos";
+import { createViewToken } from "@/lib/view-token";
 import { notFound } from "next/navigation";
-import { after } from "next/server";
-import {
-  getVideoByShareHash,
-  incrementVideoViewCount,
-} from "@/lib/db/videos";
+import { RecordView } from "./record-view";
 
 export default async function PublicVideoPage({
   params,
@@ -18,30 +16,25 @@ export default async function PublicVideoPage({
     notFound();
   }
 
-  after(async () => {
-    try {
-      await incrementVideoViewCount(hash);
-    } catch (error) {
-      console.error("Failed to increment video view count:", error);
-    }
-  });
+  const viewToken = createViewToken(hash);
 
   return (
-    <div className="min-h-screen bg-deep-sea p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-8">
+      <RecordView hash={hash} token={viewToken} />
       <div className="mx-auto max-w-4xl">
-        <div className="border-2 border-white/20 bg-charcoal shadow-[4px_4px_0_0_rgba(255,255,255,0.2)]">
+        <h1 className="mb-6 font-black text-4xl uppercase tracking-tighter bg-black text-white inline-block p-2 border-[4px] border-black mx-auto">
+          {video.title}
+        </h1>
+        <div className="border-[4px] border-black bg-black aspect-video w-full">
           <video
             src={video.blob_url}
             controls
-            className="aspect-video w-full"
+            className="w-full h-full"
             preload="metadata"
           >
             Your browser does not support the video tag.
           </video>
         </div>
-        <p className="mt-4 font-serif text-lg font-light text-white/90">
-          {video.title}
-        </p>
       </div>
     </div>
   );
