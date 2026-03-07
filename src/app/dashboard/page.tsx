@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/");
+    redirect("/login?redirectTo=/dashboard");
   }
 
   const videos = await listVideosByOwner();

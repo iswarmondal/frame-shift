@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getAllowedRequestOrigin } from "@/lib/app-url";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
@@ -18,9 +19,14 @@ export async function POST(request: Request) {
     }
   }
 
+  let appOrigin: string;
+  try {
+    appOrigin = getAllowedRequestOrigin(request.url);
+  } catch {
+    return new NextResponse("Invalid signout origin", { status: 400 });
+  }
+
   const supabase = await createClient();
   await supabase.auth.signOut();
-  const url = new URL(request.url);
-  const requestOrigin = url.origin;
-  return NextResponse.redirect(`${requestOrigin}/`, { status: 302 });
+  return NextResponse.redirect(`${appOrigin}/`, { status: 302 });
 }

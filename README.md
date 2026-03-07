@@ -23,11 +23,13 @@ Loom-style video sharing: upload videos, get shareable links, revoke access, and
 
    - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` from [Supabase API settings](https://supabase.com/dashboard/project/_/settings/api)
    - `BLOB_READ_WRITE_TOKEN` from [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) (create a store and add the token to env)
+   - `APP_ORIGIN_ALLOWLIST` as a comma-separated list of allowed callback/signout origins, e.g. `http://localhost:3000,https://your-domain.com,*.vercel.app`
 
 3. **Supabase**
 
    - Enable **Google** auth in [Authentication → Providers](https://supabase.com/dashboard/project/_/auth/providers) and add your Google OAuth client ID/secret.
-   - Add redirect URL: `http://localhost:3000/auth/callback` (and your production URL) in Supabase Auth URL config.
+   - Set **Site URL** to your production app URL.
+   - Add redirect URLs for local, production, and any other allowed domains in Supabase Auth URL config, e.g. `http://localhost:3000/auth/callback`, `https://your-domain.com/auth/callback`, and your preview/custom-domain callback URLs.
    - Run migrations: `npx supabase db push` or run `supabase/migrations/0001_init_videos.sql` in the SQL editor.
 
 4. **Run**

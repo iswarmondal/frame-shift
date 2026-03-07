@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "setup": "npm i",
+    "teardown": null,
+    "run": "npm run dev"
+  }
+}
