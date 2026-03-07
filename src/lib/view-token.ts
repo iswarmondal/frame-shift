@@ -38,7 +38,7 @@ export type ViewTokenPayload = {
 export function createViewToken(hash: string): string {
   const secret = getSecret();
   const exp = Date.now() + TTL_MS;
-  const jti = randomUUID();
+  const jti = crypto.randomUUID();
   const payload: ViewTokenPayload = { hash, exp, jti };
   const payloadB64 = base64urlEncode(
     Buffer.from(JSON.stringify(payload), "utf8")
