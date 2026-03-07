@@ -40,7 +40,7 @@ export function UploadForm() {
         </Button>
       </div>
       {state && !state.ok && (
-        <p className="text-md font-black uppercase bg-red text-white p-2 border-[4px] border-black inline-block">{state.error}</p>
+        <p className="text-base font-black uppercase bg-red text-white p-2 border-[4px] border-black inline-block">{state.error}</p>
       )}
     </form>
   );
