@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { buildRuntimeSiteUrl } from "@/lib/site-url";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -13,7 +14,9 @@ export function LoginForm() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+        redirectTo: buildRuntimeSiteUrl(
+          `/auth/callback?next=${encodeURIComponent(redirectTo)}`
+        ),
       },
     });
   }
