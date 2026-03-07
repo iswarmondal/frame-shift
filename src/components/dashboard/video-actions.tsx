@@ -84,7 +84,7 @@ export function VideoActions({ videoId, shareHash, isRevoked }: Props) {
       >
         {loading === "delete" ? "Deleting…" : "Delete video"}
       </Button>
-      {error && <p className="w-full text-md font-black uppercase tracking-widest bg-red text-white p-2 border-[4px] border-black inline-block">{error}</p>}
+      {error && <p className="w-full text-base font-black uppercase tracking-widest bg-red text-white p-2 border-[4px] border-black inline-block">{error}</p>}
     </div>
   );
 }
