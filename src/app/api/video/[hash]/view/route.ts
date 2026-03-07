@@ -4,16 +4,19 @@ import { NextResponse } from "next/server";
 
 function getClientIp(request: Request): string {
   const headers = request.headers;
-  const xRealIp = headers.get("x-real-ip");
-  if (xRealIp) return xRealIp.trim();
+function getClientIp(request: Request): string {
+  const headers = request.headers;
+  const xVercelForwardedFor = headers.get("x-vercel-forwarded-for");
+  if (xVercelForwardedFor) return xVercelForwardedFor.trim();
   const xForwardedFor = headers.get("x-forwarded-for");
   if (xForwardedFor) {
     const first = xForwardedFor.split(",")[0]?.trim();
     if (first) return first;
   }
-  const xVercelForwardedFor = headers.get("x-vercel-forwarded-for");
-  if (xVercelForwardedFor) return xVercelForwardedFor.trim();
+  const xRealIp = headers.get("x-real-ip");
+  if (xRealIp) return xRealIp.trim();
   return "0.0.0.0";
+}
 }
 
 /**
