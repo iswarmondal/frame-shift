@@ -22,19 +22,19 @@ export default async function DashboardVideoPage({
 
   return (
     <div className="min-h-screen p-8">
-      <header className="mb-8 flex items-center justify-between border-b-2 border-charcoal pb-4">
+      <header className="mb-12 flex items-center justify-between border-b-[4px] border-black pb-4">
         <Link
           href="/dashboard"
-          className="font-serif text-lg font-light text-charcoal hover:text-oxblood"
+          className="font-black text-2xl uppercase tracking-tighter text-black bg-yellow px-4 py-2 border-[4px] border-black inline-block shadow-brutal hover:translate-x-1 transition-transform"
         >
           ← Dashboard
         </Link>
       </header>
 
       <div className="mx-auto max-w-4xl space-y-8">
-        <h1 className="font-serif text-2xl font-light">{video.title}</h1>
+        <h1 className="font-black text-4xl uppercase tracking-tighter bg-black text-white inline-block p-2 border-[4px] border-black">{video.title}</h1>
 
-        <div className="aspect-video w-full border-2 border-charcoal bg-charcoal shadow-[4px_4px_0_0_theme(colors.charcoal)]">
+        <div className="aspect-video w-full border-[4px] border-black bg-black">
           <video
             src={video.blob_url}
             controls
@@ -46,20 +46,20 @@ export default async function DashboardVideoPage({
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="border-2 border-charcoal p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate">
+          <div className="border-[4px] border-black p-4 bg-white">
+            <p className="text-sm font-black uppercase tracking-widest text-black mb-2 border-b-[4px] border-black pb-1">
               Views
             </p>
-            <p className="font-serif text-2xl font-light">{video.view_count}</p>
+            <p className="font-black text-4xl">{video.view_count}</p>
           </div>
-          <div className="border-2 border-charcoal p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate">
+          <div className="border-[4px] border-black p-4 bg-white text-black">
+            <p className="text-sm font-black uppercase tracking-widest mb-2 border-b-[4px] border-black pb-1">
               Share link
             </p>
-            <p className="mt-1 truncate font-mono text-sm text-pewter">
+            <p className="mt-2 font-bold text-lg bg-yellow border-[4px] border-black p-2 inline-block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
               /video/{video.share_hash}
             </p>
-            <p className="mt-2 text-xs text-pewter">
+            <p className="mt-3 text-sm font-black uppercase">
               {video.is_revoked ? "Revoked" : "Active"}
             </p>
           </div>

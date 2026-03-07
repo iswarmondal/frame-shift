@@ -57,7 +57,7 @@ export function VideoActions({ videoId, shareHash, isRevoked }: Props) {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-col sm:flex-row flex-wrap gap-4 mt-8">
       <Button
         type="button"
         variant="secondary"
@@ -71,6 +71,7 @@ export function VideoActions({ videoId, shareHash, isRevoked }: Props) {
         variant="outline"
         onClick={handleRevoke}
         disabled={isRevoked || loading !== null}
+        className="!bg-white hover:!bg-black hover:!text-white border-black"
       >
         {loading === "revoke" ? "Revoking…" : "Revoke access"}
       </Button>
@@ -79,11 +80,11 @@ export function VideoActions({ videoId, shareHash, isRevoked }: Props) {
         variant="outline"
         onClick={handleDelete}
         disabled={loading !== null}
-        className="border-oxblood text-oxblood hover:bg-oxblood/10"
+        className="!bg-[#ef476f] !text-white border-black hover:!bg-[#d63a5d]"
       >
         {loading === "delete" ? "Deleting…" : "Delete video"}
       </Button>
-      {error && <p className="w-full text-sm text-oxblood">{error}</p>}
+      {error && <p className="w-full text-base font-black uppercase tracking-widest bg-red text-white p-2 border-[4px] border-black inline-block">{error}</p>}
     </div>
   );
 }

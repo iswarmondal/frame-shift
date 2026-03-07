@@ -19,7 +19,7 @@ export function LoginForm() {
   }
 
   return (
-    <Button type="button" onClick={signInWithGoogle} size="lg">
+    <Button type="button" onClick={signInWithGoogle} size="lg" className="w-full text-xl py-6">
       Sign in with Google
     </Button>
   );
