@@ -84,19 +84,22 @@ export async function incrementVideoViewCount(hash: string): Promise<void> {
 export type RecordViewResult = "recorded" | "rate_limited" | "replay";
 
 /**
- * Record a view with idempotency (jti) and IP rate limiting.
+ * Record a view with idempotency (jti) and viewer-based rate limiting.
+ * viewerId is the canonical identity (cookie "vid" or IP fallback).
  * Returns whether the view was recorded, rate limited, or replayed.
  */
 export async function recordVideoView(
   hash: string,
   jti: string,
-  ip: string
+  ip: string,
+  viewerId: string
 ): Promise<RecordViewResult> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("record_video_view", {
     p_hash: hash,
     p_jti: jti,
     p_ip: ip,
+    p_viewer_id: viewerId,
   });
   if (error) throw error;
   const result = data as RecordViewResult;
