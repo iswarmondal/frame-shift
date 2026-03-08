@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getVideoById } from "@/lib/db/videos";
-import { Button } from "@/components/ui/button";
 import { VideoActions } from "@/components/dashboard/video-actions";
+import { VideoTitleEdit } from "@/components/dashboard/video-title-edit";
 
 export default async function DashboardVideoPage({
   params,
@@ -32,7 +32,7 @@ export default async function DashboardVideoPage({
       </header>
 
       <div className="mx-auto max-w-4xl space-y-8">
-        <h1 className="font-serif text-2xl font-light">{video.title}</h1>
+        <VideoTitleEdit videoId={video.id} initialTitle={video.title} />
 
         <div className="aspect-video w-full border-2 border-charcoal bg-charcoal shadow-[4px_4px_0_0_theme(colors.charcoal)]">
           <video

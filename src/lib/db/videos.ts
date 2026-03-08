@@ -137,6 +137,26 @@ export async function insertVideo(row: InsertVideo): Promise<VideoRow> {
 }
 
 /**
+ * Update video title. Owner only (RLS).
+ */
+export async function updateVideoTitle(
+  id: string,
+  title: string
+): Promise<VideoRow | null> {
+  const trimmed = title.trim();
+  if (!trimmed) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("videos")
+    .update({ title: trimmed })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data as VideoRow;
+}
+
+/**
  * Revoke share link for a video. Owner only (RLS).
  */
 export async function revokeVideoShare(id: string): Promise<void> {
