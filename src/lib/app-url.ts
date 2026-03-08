@@ -42,6 +42,10 @@ export function getBrowserAppOrigin(): string {
   return window.location.origin;
 }
 
+export function getAuthCallbackOrigin(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || getBrowserAppOrigin();
+}
+
 export function isAllowedOrigin(origin: string): boolean {
   const allowlist = getAllowlistEntries();
   if (allowlist.length === 0) {

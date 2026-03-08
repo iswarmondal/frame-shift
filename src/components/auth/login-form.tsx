@@ -1,6 +1,6 @@
 "use client";
 
-import { getBrowserAppOrigin } from "@/lib/app-url";
+import { getAuthCallbackOrigin, getBrowserAppOrigin } from "@/lib/app-url";
 import { createClient } from "@/lib/supabase/client";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,19 @@ export function LoginForm() {
 
   async function signInWithGoogle() {
     const supabase = createClient();
-    const appOrigin = getBrowserAppOrigin();
+    const browserOrigin = getBrowserAppOrigin();
+    const authOrigin = getAuthCallbackOrigin();
+
+    const callbackUrl = new URL("/auth/callback", authOrigin);
+    callbackUrl.searchParams.set("next", redirectTo);
+    if (browserOrigin !== authOrigin) {
+      callbackUrl.searchParams.set("origin", browserOrigin);
+    }
 
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${appOrigin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+        redirectTo: callbackUrl.toString(),
       },
     });
   }
