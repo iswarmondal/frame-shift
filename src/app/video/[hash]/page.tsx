@@ -24,6 +24,7 @@ export default async function PublicVideoPage({
         hash={hash}
         token={viewToken}
         title={video.title}
+        description={video.description ?? ""}
         blobUrl={video.blob_url}
       />
     </div>

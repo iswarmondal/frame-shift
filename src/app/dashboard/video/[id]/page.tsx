@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getVideoById } from "@/lib/db/videos";
 import { VideoActions } from "@/components/dashboard/video-actions";
 import { VideoTitleEdit } from "@/components/dashboard/video-title-edit";
+import { VideoDescriptionEdit } from "@/components/dashboard/video-description-edit";
 
 export default async function DashboardVideoPage({
   params,
@@ -69,6 +70,11 @@ export default async function DashboardVideoPage({
           videoId={video.id}
           shareHash={video.share_hash}
           isRevoked={video.is_revoked}
+        />
+
+        <VideoDescriptionEdit
+          videoId={video.id}
+          initialDescription={video.description ?? ""}
         />
       </div>
     </div>

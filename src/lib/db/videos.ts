@@ -4,6 +4,7 @@ export type VideoRow = {
   id: string;
   owner_id: string;
   title: string;
+  description: string;
   blob_url: string;
   blob_path: string;
   share_hash: string;
@@ -149,6 +150,24 @@ export async function updateVideoTitle(
   const { data, error } = await supabase
     .from("videos")
     .update({ title: trimmed })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data as VideoRow;
+}
+
+/**
+ * Update video description. Owner only (RLS). Pass empty string to clear.
+ */
+export async function updateVideoDescription(
+  id: string,
+  description: string
+): Promise<VideoRow | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("videos")
+    .update({ description: description })
     .eq("id", id)
     .select()
     .single();

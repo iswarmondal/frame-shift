@@ -6,6 +6,7 @@ import {
   revokeVideoShare,
   deleteVideo,
   updateVideoTitle,
+  updateVideoDescription,
 } from "@/lib/db/videos";
 import { deleteBlobByUrl } from "@/lib/blob";
 import { revalidatePath } from "next/cache";
@@ -38,6 +39,32 @@ export async function updateVideoTitleAction(
   } catch (e) {
     console.error(e);
     return { ok: false, error: "Failed to update title" };
+  }
+}
+
+export async function updateVideoDescriptionAction(
+  id: string,
+  description: string
+): Promise<ActionResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Not authenticated" };
+
+  const video = await getVideoById(id);
+  if (!video || video.owner_id !== user.id) {
+    return { ok: false, error: "Video not found" };
+  }
+
+  try {
+    await updateVideoDescription(id, description);
+    revalidatePath("/dashboard");
+    revalidatePath(`/dashboard/video/${id}`);
+    return { ok: true };
+  } catch (e) {
+    console.error(e);
+    return { ok: false, error: "Failed to update description" };
   }
 }
 
