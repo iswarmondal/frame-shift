@@ -1,4 +1,7 @@
--- View deduplication and rate limiting: one view per (jti) and one per (ip, hash) per window.
+-- View deduplication and rate limiting: view_views (idempotency by jti), view_rate_limits (one per ip+hash per 10-min bucket).
+-- Single RPC record_video_view does atomic rate-limit claim, jti insert, and view count increment.
+
+-- Idempotency and audit: one row per view token (jti).
 create table public.view_views (
   jti text primary key,
   share_hash text not null,
@@ -10,14 +13,27 @@ create index view_views_rate_limit on public.view_views (share_hash, ip, created
 
 alter table public.view_views enable row level security;
 
--- No direct access; only via security definer RPC
 create policy "no_direct_access"
   on public.view_views for all
   using (false)
   with check (false);
 
--- Single RPC: check rate limit, insert idempotency row, increment view count.
--- Returns 'recorded' | 'rate_limited' | 'replay'.
+-- Atomic rate limit: one row per (ip, share_hash, 10-min bucket). INSERT ... ON CONFLICT DO NOTHING makes "claim this bucket" race-free.
+create table public.view_rate_limits (
+  ip text not null,
+  share_hash text not null,
+  bucket timestamptz not null,
+  primary key (ip, share_hash, bucket)
+);
+
+alter table public.view_rate_limits enable row level security;
+
+create policy "no_direct_access"
+  on public.view_rate_limits for all
+  using (false)
+  with check (false);
+
+-- Single RPC: atomic rate-limit claim, then idempotency insert, then increment. Returns 'recorded' | 'rate_limited' | 'replay'.
 create or replace function public.record_video_view(p_hash text, p_jti text, p_ip text)
 returns text
 language plpgsql
@@ -25,26 +41,28 @@ security definer
 set search_path = public
 as $$
 declare
-  v_rate_limited boolean;
-  v_replay boolean;
+  v_inserted integer;
 begin
-  -- Rate limit: same ip + hash already viewed in last 10 minutes
-  select exists (
-    select 1 from public.view_views
-    where share_hash = p_hash
-      and ip = p_ip
-      and created_at > now() - interval '10 minutes'
-  ) into v_rate_limited;
-  if v_rate_limited then
+  -- Atomic rate limit: claim (ip, share_hash, bucket). Only one inserter wins per bucket.
+  insert into public.view_rate_limits (ip, share_hash, bucket)
+  values (p_ip, p_hash, to_timestamp(floor(extract(epoch from now()) / 600) * 600)::timestamptz)
+  on conflict (ip, share_hash, bucket) do nothing;
+
+  get diagnostics v_inserted = row_count;
+  if v_inserted = 0 then
     return 'rate_limited';
   end if;
 
-  -- Idempotency: insert jti (one-time use). On conflict = replay.
+  -- Idempotency: one insert per jti. ON CONFLICT DO NOTHING so we can use ROW_COUNT.
   insert into public.view_views (jti, share_hash, ip)
-  values (p_jti, p_hash, p_ip);
-  -- If we get here, insert succeeded.
+  values (p_jti, p_hash, p_ip)
+  on conflict (jti) do nothing;
 
-  -- Increment view count for this video (same logic as increment_video_view_count)
+  get diagnostics v_inserted = row_count;
+  if v_inserted = 0 then
+    return 'replay';
+  end if;
+
   update public.videos
   set view_count = view_count + 1,
       updated_at = now()
@@ -52,14 +70,8 @@ begin
     and not is_revoked;
 
   return 'recorded';
-exception
-  when unique_violation then
-    return 'replay';
 end;
 $$;
 
 grant execute on function public.record_video_view(text, text, text) to anon;
 grant execute on function public.record_video_view(text, text, text) to authenticated;
-
--- Optional: periodic cleanup of old view_views rows (e.g. run daily)
--- delete from public.view_views where created_at < now() - interval '7 days';

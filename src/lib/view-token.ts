@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 const ALG = "sha256";
 const SEP = ".";
-const TTL_MS = 60_000; // 1 minute: token valid only briefly after page load
+const TTL_MS = 5 * 60_000; // 5 minutes
 
 function base64urlEncode(buf: Buffer): string {
   return buf.toString("base64url");
