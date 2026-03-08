@@ -1,25 +1,16 @@
 import { recordVideoView } from "@/lib/db/videos";
+import {
+  getViewerIdentity,
+  isAllowedRequestOrigin,
+} from "@/lib/request-client";
 import { verifyViewToken } from "@/lib/view-token";
+import { VIEW_RECORD_WATCHED_SECONDS } from "@/lib/view-tracking";
 import { NextResponse } from "next/server";
 
-function getClientIp(request: Request): string {
-  const headers = request.headers;
-  const xRealIp = headers.get("x-real-ip");
-  if (xRealIp) return xRealIp.trim();
-  const xForwardedFor = headers.get("x-forwarded-for");
-  if (xForwardedFor) {
-    const first = xForwardedFor.split(",")[0]?.trim();
-    if (first) return first;
-  }
-  const xVercelForwardedFor = headers.get("x-vercel-forwarded-for");
-  if (xVercelForwardedFor) return xVercelForwardedFor.trim();
-  return "0.0.0.0";
-}
-
 /**
- * POST /api/video/[hash]/view — record a view (with token + rate limiting).
- * Body: { token: string } — short-lived signed token from the page render.
- * Returns 200 always when token is valid (recorded, rate-limited, or replay).
+ * POST /api/video/[hash]/view — record a view (token + playback milestone + rate limiting).
+ * Body: { token: string, watchedSeconds: number } — token from page; watchedSeconds must be >= threshold.
+ * Returns 200 when token valid and view recorded/rate-limited/replay; 400 if playback threshold not met.
  */
 export async function POST(
   request: Request,
@@ -30,12 +21,12 @@ export async function POST(
     return NextResponse.json({ error: "Missing hash" }, { status: 400 });
   }
 
-  let body: { token?: string };
+  let body: { token?: string; watchedSeconds?: number };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json(
-      { error: "Invalid body; expected { token }" },
+      { error: "Invalid body; expected { token, watchedSeconds }" },
       { status: 400 }
     );
   }
@@ -49,6 +40,27 @@ export async function POST(
     );
   }
 
+  const watchedSeconds =
+    typeof body?.watchedSeconds === "number" ? body.watchedSeconds : undefined;
+  if (
+    watchedSeconds === undefined ||
+    watchedSeconds < VIEW_RECORD_WATCHED_SECONDS
+  ) {
+    return NextResponse.json(
+      {
+        error: `Playback threshold not met; watch at least ${VIEW_RECORD_WATCHED_SECONDS} seconds`,
+      },
+      { status: 400 }
+    );
+  }
+
+  if (!isAllowedRequestOrigin(request)) {
+    return NextResponse.json(
+      { error: "Origin not allowed" },
+      { status: 403 }
+    );
+  }
+
   const payload = verifyViewToken(token, hash);
   if (!payload) {
     return NextResponse.json(
@@ -58,8 +70,8 @@ export async function POST(
   }
 
   try {
-    const ip = getClientIp(request);
-    const result = await recordVideoView(hash, payload.jti, ip);
+    const { viewerId, ip } = getViewerIdentity(request);
+    const result = await recordVideoView(hash, payload.jti, ip, viewerId);
     return NextResponse.json({ ok: true, result });
   } catch (error) {
     console.error("Failed to record video view:", error);
